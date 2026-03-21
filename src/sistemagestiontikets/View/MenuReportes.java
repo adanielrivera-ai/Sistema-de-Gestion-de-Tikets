@@ -15,8 +15,7 @@ import java.util.List;
  */
 public class MenuReportes {
     
-    private final TicketService ticketService;
-
+private final TicketService ticketService;
  
     public MenuReportes(TicketService ticketService) {
         this.ticketService = ticketService;
@@ -53,17 +52,14 @@ public class MenuReportes {
  
     private void reportePorFecha() {
         Consolautil.mostrarSubtitulo("Tickets vendidos por fecha");
-        
-        LocalDate fecha = Consolautil.leerFecha("Ingrese la fecha a consultar");
+        LocalDate fecha = Consolautil.leerFecha("Fecha a consultar");
         List<Ticket> lista = ticketService.listarPorFecha(fecha);
         if (lista.isEmpty()) {
             Consolautil.mostrarInfo("No hay tickets para la fecha " + fecha + ".");
             return;
         }
         Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
-        
         Consolautil.mostrarLinea();
-
         for (Ticket t : lista) { t.imprimirDetalle(); Consolautil.mostrarLinea(); }
     }
  
@@ -82,10 +78,6 @@ public class MenuReportes {
         }
         Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
         Consolautil.mostrarLinea();
-            Consolautil.mostrarInfo("No hay tickets para vehículos de tipo " + tipo + ".");
-            return;
-        }
-        Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
         for (Ticket t : lista) { t.imprimirDetalle(); Consolautil.mostrarLinea(); }
     }
  
@@ -99,18 +91,11 @@ public class MenuReportes {
         };
         List<Ticket> lista = ticketService.listarPorTipoPasajero(tipo);
         if (lista.isEmpty()) {
-
             Consolautil.mostrarInfo("No hay tickets para pasajeros tipo " + tipo + ".");
             return;
         }
         Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
         Consolautil.mostrarLinea();
-
-            Consolautil.mostrarInfo("No hay tickets para pasajeros de tipo " + tipo + ".");
-            return;
-        }
-        Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
-
         for (Ticket t : lista) { t.imprimirDetalle(); Consolautil.mostrarLinea(); }
     }
  
@@ -119,11 +104,8 @@ public class MenuReportes {
         Consolautil.mostrarSubtitulo("Resumen del día — " + hoy);
         List<Ticket> lista = ticketService.listarPorFecha(hoy);
         double totalHoy = lista.stream().mapToDouble(Ticket::getValorFinal).sum();
-        
         Consolautil.mostrarInfo("Tickets vendidos hoy : " + lista.size());
         Consolautil.mostrarInfo("Total recaudado hoy  : $" + String.format("%,.0f", totalHoy));
-        Consolautil.mostrarInfo("Total tickets vendidos hoy : " + lista.size());
-        Consolautil.mostrarInfo("Total recaudado hoy        : $" + String.format("%,.0f", totalHoy));
     }
  
     private void totalRecaudado() {
