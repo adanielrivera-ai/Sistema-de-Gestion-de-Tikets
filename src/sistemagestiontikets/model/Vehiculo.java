@@ -15,7 +15,7 @@ public abstract class Vehiculo {
     protected int    contadorPasajeros;
     protected double tarifaBase;
 
-    public Vehiculo(String placa, Ruta ruta, int contadorPasajeros) {
+    public Vehiculo(String placa, Ruta ruta) {
         this.placa = placa;
         this.ruta = ruta;
         this.contadorPasajeros = 0;
