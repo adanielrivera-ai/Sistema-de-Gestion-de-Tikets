@@ -59,5 +59,13 @@ public class VehiculoService {
         vehiculoDAO.guardarVehiculo(nuevo);
         return "OK: " + tipo + " [" + placa + "] registrado correctamente.";
     }
-
+    public Vehiculo vehiculoConMasTickets() {
+        if (vehiculos.isEmpty()) return null;
+        Vehiculo max = vehiculos.get(0);
+        for (Vehiculo v : vehiculos) {
+            if (v.getContadorPasajeros() > max.getContadorPasajeros())
+                max = v;
+        }
+        return max;
+    }
 }
