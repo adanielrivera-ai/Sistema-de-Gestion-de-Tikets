@@ -78,7 +78,10 @@ public abstract class Vehiculo implements Imprimible{
 
     @Override
     public String toString() {
-        return "Vehiculo{" + "placa=" + placa + ", ruta=" + ruta + ", capacidadMaxima=" + capacidadMaxima + ", contadorPasajeros=" + contadorPasajeros + ", tarifaBase=" + tarifaBase + '}';
+        return getTipoVehiculo() + " | Placa: " + placa
+             + " | Ruta: " + (ruta != null
+                 ? ruta.getOrigen() + " -> " + ruta.getDestino() : "Sin ruta")
+             + " | Cupos: " + contadorPasajeros + "/" + capacidadMaxima;
     }
     
     @Override
