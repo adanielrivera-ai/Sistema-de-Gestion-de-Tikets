@@ -20,4 +20,6 @@ public abstract class Vehiculo {
         this.ruta = ruta;
         this.contadorPasajeros = 0;
     }
+    
+    public abstract String getTipoVehiculo();
 }
