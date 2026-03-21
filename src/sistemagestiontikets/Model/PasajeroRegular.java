@@ -4,10 +4,22 @@
  */
 package sistemagestiontikets.model;
 
+import java.time.LocalDate;
+
+/**
+ * Clase que representa un pasajero regular sin descuento.
+ * @author JAVIER FERNANDEZ
+ */
 public class PasajeroRegular extends Pasajero {
 
-    public PasajeroRegular(String cedula, String nombre) {
-        super(cedula, nombre);
+    /**
+     * Constructor de PasajeroRegular
+     * @param cedula cedula de identidad
+     * @param nombre nombre completo
+     * @param fechaNacimiento fecha de nacimiento
+     */
+    public PasajeroRegular(String cedula, String nombre, LocalDate fechaNacimiento) {
+        super(cedula, nombre, fechaNacimiento);
     }
 
     @Override
@@ -18,8 +30,9 @@ public class PasajeroRegular extends Pasajero {
     @Override
     public void imprimirDetalle() {
         System.out.println("=== Pasajero Regular ===");
-        System.out.println("Cedula   : " + cedula);
-        System.out.println("Nombre   : " + nombre);
+        System.out.println("Cedula   : " + getCedula());
+        System.out.println("Nombre   : " + getNombre());
+        System.out.println("Edad     : " + getEdad());
         System.out.println("Descuento: 0%");
     }
 }
