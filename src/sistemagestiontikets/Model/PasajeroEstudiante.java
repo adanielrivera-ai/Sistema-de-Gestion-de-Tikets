@@ -4,10 +4,12 @@
  */
 package sistemagestiontikets.model;
 
+import java.time.LocalDate;
+
 public class PasajeroEstudiante extends Pasajero {
 
-    public PasajeroEstudiante(String cedula, String nombre) {
-        super(cedula, nombre);
+    public PasajeroEstudiante(String cedula, String nombre, LocalDate fechaNacimiento) {
+        super(cedula, nombre, fechaNacimiento);
     }
 
     @Override
@@ -18,8 +20,9 @@ public class PasajeroEstudiante extends Pasajero {
     @Override
     public void imprimirDetalle() {
         System.out.println("=== Pasajero Estudiante ===");
-        System.out.println("Cedula   : " + cedula);
-        System.out.println("Nombre   : " + nombre);
+        System.out.println("Cedula   : " + getCedula());
+        System.out.println("Nombre   : " + getNombre());
+        System.out.println("Edad     : " + getEdad());
         System.out.println("Descuento: 15%");
     }
 }

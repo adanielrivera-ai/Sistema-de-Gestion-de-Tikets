@@ -11,6 +11,7 @@ import sistemagestiontikets.model.Pasajero;
 import sistemagestiontikets.model.PasajeroRegular;
 import sistemagestiontikets.model.PasajeroEstudiante;
 import sistemagestiontikets.model.PasajeroAdultoMayor;
+import java.time.LocalDate;
 import java.util.List;
 
 public class PersonaService {
@@ -25,22 +26,22 @@ public class PersonaService {
         System.out.println("Conductor registrado exitosamente.");
     }
 
-    public void registrarPasajero(String cedula, String nombre, int tipo) {
+    public void registrarPasajero(String cedula, String nombre,
+                                   LocalDate fechaNacimiento, boolean esEstudiante) {
         Pasajero pasajero;
-        switch (tipo) {
-            case 1:
-                pasajero = new PasajeroRegular(cedula, nombre);
-                break;
-            case 2:
-                pasajero = new PasajeroEstudiante(cedula, nombre);
-                break;
-            case 3:
-                pasajero = new PasajeroAdultoMayor(cedula, nombre);
-                break;
-            default:
-                System.out.println("Tipo de pasajero invalido.");
-                return;
+        int edad = LocalDate.now().getYear() - fechaNacimiento.getYear();
+
+        if (edad >= 60) {
+            pasajero = new PasajeroAdultoMayor(cedula, nombre, fechaNacimiento);
+            System.out.println("Tipo detectado automaticamente: Adulto Mayor");
+        } else if (esEstudiante) {
+            pasajero = new PasajeroEstudiante(cedula, nombre, fechaNacimiento);
+            System.out.println("Tipo detectado: Estudiante");
+        } else {
+            pasajero = new PasajeroRegular(cedula, nombre, fechaNacimiento);
+            System.out.println("Tipo detectado: Regular");
         }
+
         pasajeroDAO.guardarPasajero(pasajero);
         System.out.println("Pasajero registrado exitosamente.");
     }
