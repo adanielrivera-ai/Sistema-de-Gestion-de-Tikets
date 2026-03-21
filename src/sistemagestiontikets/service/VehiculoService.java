@@ -24,4 +24,15 @@ public class VehiculoService {
         this.rutas       = rutaDAO.cargarRutas();
         this.vehiculos   = vehiculoDAO.cargarVehiculos(rutas);
     }
+    public String registrarRuta(String codigo, String origen, String destino,
+                                double distancia, int tiempo) {
+        for (Ruta r : rutas) {
+            if (r.getCodigo().equals(codigo))
+                return "ERROR: Ya existe una ruta con codigo " + codigo;
+        }
+        Ruta nueva = new Ruta(codigo, origen, destino, distancia, tiempo);
+        rutas.add(nueva);
+        rutaDAO.guardarRuta(nueva);
+        return "OK: Ruta " + codigo + " registrada.";
+    }
 }
