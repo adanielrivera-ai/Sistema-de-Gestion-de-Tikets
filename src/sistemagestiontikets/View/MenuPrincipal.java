@@ -35,7 +35,7 @@ public class MenuPrincipal {
         int opcion;
         do {
             mostrarMenu();
-            opcion = ConsolaUtil.leerEntero("Seleccione una opción");
+            opcion = Consolautil.leerEntero("Seleccione una opción");
             procesarOpcion(opcion);
         } while (opcion != 0);
 
@@ -43,14 +43,14 @@ public class MenuPrincipal {
     }
      
      private void mostrarMenu() {
-        ConsolaUtil.mostrarTitulo("Sistema TransCesar S.A.S.");
+        Consolautil.mostrarTitulo("Sistema TransCesar S.A.S.");
         System.out.println("  1. Gestión de vehículos");
         System.out.println("  2. Gestión de personas");
         System.out.println("  3. Venta de tickets");
         System.out.println("  4. Gestión de rutas");
         System.out.println("  5. Reportes");
         System.out.println("  0. Salir");
-        ConsolaUtil.mostrarLinea();
+        Consolautil.mostrarLinea();
     }
 
     private void procesarOpcion(int opcion) {
@@ -62,8 +62,8 @@ public class MenuPrincipal {
             case 5 -> menuReportes.mostrar();
             case 0 -> { /* salir */ }
             default -> {
-                ConsolaUtil.mostrarError("Opción no válida. Intente de nuevo.");
-                ConsolaUtil.pausar();
+                Consolautil.mostrarError("Opción no válida. Intente de nuevo.");
+                Consolautil.pausar();
             }
         }
     }
@@ -74,10 +74,9 @@ public class MenuPrincipal {
         System.out.println("  ║         SISTEMA DE GESTIÓN DE TICKETS             ║");
         System.out.println("  ║              TransCesar S.A.S.                    ║");
         System.out.println("  ║                                                   ║");
-
         System.out.println("  ╚═══════════════════════════════════════════════════╝");
         System.out.println();
-        ConsolaUtil.pausar();
+        Consolautil.pausar();
     }
 
     private void mostrarDespedida() {
