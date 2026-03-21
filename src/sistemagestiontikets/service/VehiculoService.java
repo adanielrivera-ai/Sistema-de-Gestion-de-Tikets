@@ -17,5 +17,11 @@ public class VehiculoService {
     private List<Vehiculo> vehiculos;
     private List<Ruta> rutas;
     private VehiculoDAO vehiculoDAO;
-    private RutaDAO rutaDAO;    
+    private RutaDAO rutaDAO;
+    public VehiculoService() {
+        this.vehiculoDAO = new VehiculoDAO();
+        this.rutaDAO     = new RutaDAO();
+        this.rutas       = rutaDAO.cargarRutas();
+        this.vehiculos   = vehiculoDAO.cargarVehiculos(rutas);
+    }
 }
