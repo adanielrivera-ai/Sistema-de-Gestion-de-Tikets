@@ -8,12 +8,13 @@ package sistemagestiontikets.model;
  *
  * @author Camilo
  */
-public abstract class Vehiculo {
+public abstract class Vehiculo implements Imprimible{
     protected String placa;
     protected Ruta   ruta;
     protected int    capacidadMaxima;
     protected int    contadorPasajeros;
     protected double tarifaBase;
+    protected Conductor conductor;
 
     public Vehiculo(String placa, Ruta ruta) {
         this.placa = placa;
@@ -69,10 +70,6 @@ public abstract class Vehiculo {
 
     public double getTarifaBase() {
         return tarifaBase;
-    }
-
-    public void setTarifaBase(double tarifaBase) {
-        this.tarifaBase = tarifaBase;
     }
 
     @Override
