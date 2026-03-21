@@ -76,4 +76,30 @@ public class VehiculoService {
         }
         return null;
     }
+    public String asignarConductor(String placa, String cedulaConductor) {
+        // Buscar el vehículo
+        Vehiculo vehiculo = buscarPorPlaca(placa);
+        if (vehiculo == null)
+            return "ERROR: No existe un vehículo con placa " + placa;
+
+        // Buscar el conductor en los archivos
+        List<Conductor> conductores = new sistemagestiontikets.dao.ConductorDAO().cargarConductores();
+        Conductor conductor = null;
+        for (Conductor c : conductores) {
+            if (c.getCedula().equals(cedulaConductor)) {
+                conductor = c;
+                break;
+            }
+        }
+        if (conductor == null)
+            return "ERROR: No existe un conductor con cédula " + cedulaConductor;
+
+        // Validar que tenga licencia registrada
+        if (conductor.getNumLicencia() == null || conductor.getNumLicencia().isBlank())
+            return "ERROR: El conductor no tiene licencia registrada.";
+
+        vehiculo.setConductor(conductor);
+        vehiculoDAO.guardarVehiculo(vehiculo);
+        return "OK: Conductor " + conductor.getNombre() + " asignado al vehículo " + placa;
+    }
 }

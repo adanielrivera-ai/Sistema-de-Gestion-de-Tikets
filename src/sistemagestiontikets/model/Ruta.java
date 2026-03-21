@@ -8,7 +8,7 @@ package sistemagestiontikets.model;
  *
  * @author Camilo
  */
-public class Ruta {
+public class Ruta implements Imprimible{
     private String codigo;
     private String origen;
     private String destino;
@@ -45,6 +45,16 @@ public class Ruta {
 
     @Override
     public String toString() {
-        return "Ruta{" + "codigo=" + codigo + ", origen=" + origen + ", destino=" + destino + ", distanciaKm=" + distanciaKm + ", tiempoEstimadoMin=" + tiempoEstimadoMin + '}';
+        return "[" + codigo + "] " + origen + " -> " + destino
+             + " (" + distanciaKm + " km, ~" + tiempoEstimadoMin + " min)";
+    }
+    @Override
+    public void imprimirDetalle() {
+        System.out.println("=== Ruta ===");
+        System.out.println("Código  : " + codigo);
+        System.out.println("Origen  : " + origen);
+        System.out.println("Destino : " + destino);
+        System.out.println("Distancia: " + distanciaKm + " km");
+        System.out.println("Tiempo  : ~" + tiempoEstimadoMin + " min");
     }
 }
