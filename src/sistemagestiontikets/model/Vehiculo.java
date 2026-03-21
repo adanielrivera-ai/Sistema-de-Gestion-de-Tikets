@@ -74,4 +74,9 @@ public abstract class Vehiculo {
     public void setTarifaBase(double tarifaBase) {
         this.tarifaBase = tarifaBase;
     }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" + "placa=" + placa + ", ruta=" + ruta + ", capacidadMaxima=" + capacidadMaxima + ", contadorPasajeros=" + contadorPasajeros + ", tarifaBase=" + tarifaBase + '}';
+    }
 }
