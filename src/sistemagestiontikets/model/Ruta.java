@@ -15,4 +15,13 @@ public class Ruta {
     private double distanciaKm;
     private int    tiempoEstimadoMin;
 
+    public Ruta(String codigo, String origen, String destino, double distanciaKm, int tiempoEstimadoMin) {
+        this.codigo = codigo;
+        this.origen = origen;
+        this.destino = destino;
+        this.distanciaKm = distanciaKm;
+        this.tiempoEstimadoMin = tiempoEstimadoMin;
+    }
+    
+    
 }
