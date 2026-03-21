@@ -10,9 +10,9 @@ package sistemagestiontikets.model;
  */
 public abstract class Vehiculo implements Imprimible{
     protected String placa;
-    protected Ruta   ruta;
-    protected int    capacidadMaxima;
-    protected int    contadorPasajeros;
+    protected Ruta ruta;
+    protected int capacidadMaxima;
+    protected int contadorPasajeros;
     protected double tarifaBase;
     protected Conductor conductor;
 
@@ -56,10 +56,6 @@ public abstract class Vehiculo implements Imprimible{
         return capacidadMaxima;
     }
 
-    public void setCapacidadMaxima(int capacidadMaxima) {
-        this.capacidadMaxima = capacidadMaxima;
-    }
-
     public int getContadorPasajeros() {
         return contadorPasajeros;
     }
@@ -70,6 +66,14 @@ public abstract class Vehiculo implements Imprimible{
 
     public double getTarifaBase() {
         return tarifaBase;
+    }
+    
+    public Conductor getConductor(){
+        return conductor;
+    }
+    
+    public void setConductor(Conductor c){
+        this.conductor = c;
     }
 
     @Override
