@@ -4,14 +4,21 @@
  */
 package sistemagestiontikets.View;
 
+import sistemagestiontikets.model.Conductor;
+import sistemagestiontikets.model.Pasajero;
+import sistemagestiontikets.service.PersonaService;
+import java.time.LocalDate;
+import java.util.List;
 /**
  *
  * @author alexr
  */
 public class MenuPersonas {
     
-        public MenuPersonas() {
-        // TODO: inicializar servicio
+        private final PersonaService personaService;
+ 
+    public MenuPersonas(PersonaService personaService) {
+        this.personaService = personaService;
     }
  
     public void mostrar() {
@@ -43,43 +50,67 @@ public class MenuPersonas {
  
     private void registrarConductor() {
         Consolautil.mostrarSubtitulo("Registrar conductor");
-        String cedula    = Consolautil.leerTexto("Cédula");
-        String nombre    = Consolautil.leerTexto("Nombre completo");
-        // TODO (Desarrollador 2): leer fecha de nacimiento con ConsolaUtil.leerFecha()
-        String licencia  = Consolautil.leerTexto("Número de licencia");
+        String cedula      = Consolautil.leerTexto("Cédula");
+        String nombre      = Consolautil.leerTexto("Nombre completo");
+        LocalDate fechaNac = Consolautil.leerFecha("Fecha de nacimiento");
+        String licencia    = Consolautil.leerTexto("Número de licencia");
+ 
         System.out.println("  Categoría de licencia:");
         System.out.println("    1. B1   2. B2   3. C1   4. C2");
-        int catOp        = Consolautil.leerEntero("Seleccione categoría");
+        int catOp = Consolautil.leerEntero("Seleccione categoría");
         String categoria = switch (catOp) {
             case 1 -> "B1"; case 2 -> "B2";
             case 3 -> "C1"; case 4 -> "C2";
             default -> "B1";
         };
-        // TODO: llamar personaService.registrarConductor(cedula, nombre, fechaNac, licencia, categoria)
-        Consolautil.mostrarExito("Conductor registrado. [pendiente implementación]");
+ 
+        String resultado = personaService.registrarConductor(cedula, nombre, fechaNac, licencia, categoria);
+        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
+        else                            Consolautil.mostrarError(resultado);
     }
  
     private void registrarPasajero() {
         Consolautil.mostrarSubtitulo("Registrar pasajero");
-        String cedula = Consolautil.leerTexto("Cédula");
-        String nombre = Consolautil.leerTexto("Nombre completo");
-        // El tipo se determina automáticamente desde la fecha de nacimiento (>=60 -> ADULTO_MAYOR)
-        // Si no aplica adulto mayor, se pregunta si es estudiante
-        // TODO (Desarrollador 2): implementar lógica de determinación de tipo
-        Consolautil.mostrarExito("Pasajero registrado. [pendiente implementación]");
+        String cedula      = Consolautil.leerTexto("Cédula");
+        String nombre      = Consolautil.leerTexto("Nombre completo");
+        LocalDate fechaNac = Consolautil.leerFecha("Fecha de nacimiento");
+ 
+        // Calcular edad para determinar si aplica adulto mayor automáticamente
+        int edad = LocalDate.now().getYear() - fechaNac.getYear();
+        boolean esEstudiante = false;
+        if (edad < 60) {
+            String resp = Consolautil.leerTexto("¿Es estudiante? (s/n)");
+            esEstudiante = resp.equalsIgnoreCase("s");
+        }
+ 
+        String resultado = personaService.registrarPasajero(cedula, nombre, fechaNac, esEstudiante);
+        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
+        else                            Consolautil.mostrarError(resultado);
     }
  
     private void listarConductores() {
         Consolautil.mostrarSubtitulo("Conductores registrados");
-        // TODO: obtener lista de personaService.listarConductores()
-        // y llamar conductor.imprimirDetalle()
-        Consolautil.mostrarInfo("Sin conductores registrados aún. [pendiente implementación]");
+        List<Conductor> lista = personaService.listarConductores();
+        if (lista.isEmpty()) {
+            Consolautil.mostrarInfo("No hay conductores registrados.");
+            return;
+        }
+        for (Conductor c : lista) {
+            c.imprimirDetalle();
+            Consolautil.mostrarLinea();
+        }
     }
  
     private void listarPasajeros() {
         Consolautil.mostrarSubtitulo("Pasajeros registrados");
-        // TODO: obtener lista de personaService.listarPasajeros()
-        // y llamar pasajero.imprimirDetalle()
-        Consolautil.mostrarInfo("Sin pasajeros registrados aún. [pendiente implementación]");
+        List<Pasajero> lista = personaService.listarPasajeros();
+        if (lista.isEmpty()) {
+            Consolautil.mostrarInfo("No hay pasajeros registrados.");
+            return;
+        }
+        for (Pasajero p : lista) {
+            p.imprimirDetalle();
+            Consolautil.mostrarLinea();
+        }
     }
 }

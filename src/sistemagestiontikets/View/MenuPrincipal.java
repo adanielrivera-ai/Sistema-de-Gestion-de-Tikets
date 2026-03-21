@@ -4,55 +4,77 @@
  */
 package sistemagestiontikets.View;
 
+import sistemagestiontikets.service.VehiculoService;
+import sistemagestiontikets.service.PersonaService;
+import sistemagestiontikets.service.TicketService;
+import sistemagestiontikets.service.ReservaService;
 /**
  *
  * @author alexr
  */
 public class MenuPrincipal {
     
+        private final VehiculoService vehiculoService;
+    private final PersonaService  personaService;
+    private final TicketService   ticketService;
+    private final ReservaService  reservaService;
+ 
+    // Submenús
     private final MenuVehiculos menuVehiculos;
     private final MenuPersonas  menuPersonas;
     private final MenuTickets   menuTickets;
     private final MenuRutas     menuRutas;
     private final MenuReportes  menuReportes;
-
+    private final MenuReservas  menuReservas;
+ 
     public MenuPrincipal() {
-       this.menuVehiculos = new MenuVehiculos();
-        this.menuPersonas  = new MenuPersonas();
-        this.menuTickets   = new MenuTickets();
-        this.menuRutas     = new MenuRutas();
-        this.menuReportes  = new MenuReportes();
+        // Crear services — el orden importa: TicketService necesita los otros dos
+        this.vehiculoService = new VehiculoService();
+        this.personaService  = new PersonaService();
+        this.ticketService   = new TicketService(personaService, vehiculoService);
+        this.reservaService  = new ReservaService(vehiculoService, personaService, ticketService);
+ 
+        // Inyectar cada service en su submenú
+        this.menuVehiculos = new MenuVehiculos(vehiculoService);
+        this.menuPersonas  = new MenuPersonas(personaService);
+        this.menuTickets   = new MenuTickets(ticketService);
+        this.menuRutas     = new MenuRutas(vehiculoService);      // VehiculoService ya tiene rutas
+        this.menuReportes  = new MenuReportes(ticketService);
+        this.menuReservas  = new MenuReservas(reservaService);
     }
-    
-     public void iniciar() {
+ 
+    public void iniciar() {
         mostrarBienvenida();
-        // TODO (Líder): cargar archivos al iniciar el sistema
-        // vehiculoService.cargarDatos();
-        // personaService.cargarDatos();
-        // ticketService.cargarDatos();
-        // rutaService.cargarDatos();
-
+ 
+        // Verificar reservas vencidas automáticamente al arrancar
+        int vencidas = reservaService.verificarReservasVencidas();
+        if (vencidas > 0) {
+            Consolautil.mostrarInfo("Se cancelaron " + vencidas + " reserva(s) vencidas al iniciar.");
+            Consolautil.pausar();
+        }
+ 
         int opcion;
         do {
             mostrarMenu();
             opcion = Consolautil.leerEntero("Seleccione una opción");
             procesarOpcion(opcion);
         } while (opcion != 0);
-
+ 
         mostrarDespedida();
     }
-     
-     private void mostrarMenu() {
+ 
+    private void mostrarMenu() {
         Consolautil.mostrarTitulo("Sistema TransCesar S.A.S.");
         System.out.println("  1. Gestión de vehículos");
         System.out.println("  2. Gestión de personas");
         System.out.println("  3. Venta de tickets");
         System.out.println("  4. Gestión de rutas");
         System.out.println("  5. Reportes");
+        System.out.println("  6. Reservas");
         System.out.println("  0. Salir");
         Consolautil.mostrarLinea();
     }
-
+ 
     private void procesarOpcion(int opcion) {
         switch (opcion) {
             case 1 -> menuVehiculos.mostrar();
@@ -60,7 +82,8 @@ public class MenuPrincipal {
             case 3 -> menuTickets.mostrar();
             case 4 -> menuRutas.mostrar();
             case 5 -> menuReportes.mostrar();
-            case 0 -> { /* salir */ }
+            case 6 -> menuReservas.mostrar();
+            case 0 -> { }
             default -> {
                 Consolautil.mostrarError("Opción no válida. Intente de nuevo.");
                 Consolautil.pausar();

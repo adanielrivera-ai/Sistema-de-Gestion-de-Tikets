@@ -4,14 +4,20 @@
  */
 package sistemagestiontikets.View;
 
+import sistemagestiontikets.model.Ruta;
+import sistemagestiontikets.model.Vehiculo;
+import sistemagestiontikets.service.VehiculoService;
+import java.util.List;
 /**
  *
  * @author alexr
  */
 public class MenuVehiculos {
     
-    public MenuVehiculos() {
-        // TODO: inicializar servicios
+    private final VehiculoService vehiculoService;
+ 
+    public MenuVehiculos(VehiculoService vehiculoService) {
+        this.vehiculoService = vehiculoService;
     }
  
     public void mostrar() {
@@ -45,25 +51,48 @@ public class MenuVehiculos {
  
     private void registrarVehiculo(String tipo) {
         Consolautil.mostrarSubtitulo("Registrar " + tipo);
-        String placa = Consolautil.leerTexto("Placa");
-        // TODO (Desarrollador 1): leer lista de rutas disponibles y pedir selección
-        // TODO: llamar vehiculoService.registrarVehiculo(tipo, placa, ruta)
-        Consolautil.mostrarExito("Vehículo registrado correctamente. [pendiente implementación]");
+ 
+        // Mostrar rutas disponibles
+        List<Ruta> rutas = vehiculoService.listarRutas();
+        if (rutas.isEmpty()) {
+            Consolautil.mostrarError("No hay rutas registradas. Vaya al menú 4 y registre una ruta primero.");
+            return;
+        }
+        Consolautil.mostrarInfo("Rutas disponibles:");
+        for (Ruta r : rutas) {
+            System.out.println("    [" + r.getCodigo() + "] "
+                + r.getOrigen() + " -> " + r.getDestino()
+                + "  (" + r.getDistanciaKm() + " km)");
+        }
+ 
+        String placa      = Consolautil.leerTexto("Placa del vehículo");
+        String codigoRuta = Consolautil.leerTexto("Código de ruta");
+ 
+        String resultado = vehiculoService.registrarVehiculo(tipo, placa, codigoRuta);
+        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
+        else                            Consolautil.mostrarError(resultado);
     }
  
     private void listarVehiculos() {
-        Consolautil.mostrarSubtitulo("Lista de vehículos registrados");
-        // TODO (Desarrollador 1): obtener lista de vehiculoService.listarTodos()
-        // y llamar vehiculo.imprimirDetalle() en cada uno
-        Consolautil.mostrarInfo("Sin vehículos registrados aún. [pendiente implementación]");
+        Consolautil.mostrarSubtitulo("Vehículos registrados");
+        List<Vehiculo> lista = vehiculoService.listarVehiculos();
+        if (lista.isEmpty()) {
+            Consolautil.mostrarInfo("No hay vehículos registrados.");
+            return;
+        }
+        for (Vehiculo v : lista) {
+            v.imprimirDetalle();
+            Consolautil.mostrarLinea();
+        }
     }
  
     private void asignarConductor() {
         Consolautil.mostrarSubtitulo("Asignar conductor a vehículo");
-        String placa      = Consolautil.leerTexto("Placa del vehículo");
-        String cedula     = Consolautil.leerTexto("Cédula del conductor");
-        // TODO (Desarrollador 1): llamar vehiculoService.asignarConductor(placa, cedula)
-        // y manejar excepción si conductor no tiene licencia
-        Consolautil.mostrarExito("Conductor asignado. [pendiente implementación]");
+        String placa  = Consolautil.leerTexto("Placa del vehículo");
+        String cedula = Consolautil.leerTexto("Cédula del conductor");
+ 
+        String resultado = vehiculoService.asignarConductor(placa, cedula);
+        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
+        else                            Consolautil.mostrarError(resultado);
     }
 }

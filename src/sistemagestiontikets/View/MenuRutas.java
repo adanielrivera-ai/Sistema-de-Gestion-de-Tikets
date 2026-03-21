@@ -4,14 +4,19 @@
  */
 package sistemagestiontikets.View;
 
+import sistemagestiontikets.model.Ruta;
+import sistemagestiontikets.service.VehiculoService;
+import java.util.List;
 /**
  *
  * @author alexr
  */
 public class MenuRutas {
     
-    public MenuRutas() {
-        // TODO: inicializar servicio
+    private final VehiculoService vehiculoService;
+ 
+    public MenuRutas(VehiculoService vehiculoService) {
+        this.vehiculoService = vehiculoService;
     }
  
     public void mostrar() {
@@ -39,19 +44,27 @@ public class MenuRutas {
  
     private void registrarRuta() {
         Consolautil.mostrarSubtitulo("Registrar nueva ruta");
-        String codigo      = Consolautil.leerTexto("Código de ruta");
-        String origen      = Consolautil.leerTexto("Ciudad de origen");
-        String destino     = Consolautil.leerTexto("Ciudad de destino");
-        double distancia   = Consolautil.leerDouble("Distancia (km)");
-        int    tiempoEst   = Consolautil.leerEntero("Tiempo estimado (minutos)");
-        // TODO (Desarrollador 1): llamar rutaService.registrarRuta(...)
-        Consolautil.mostrarExito("Ruta registrada. [pendiente implementación]");
+        String codigo    = Consolautil.leerTexto("Código de ruta");
+        String origen    = Consolautil.leerTexto("Ciudad de origen");
+        String destino   = Consolautil.leerTexto("Ciudad de destino");
+        double distancia = Consolautil.leerDouble("Distancia (km)");
+        int    tiempo    = Consolautil.leerEntero("Tiempo estimado (minutos)");
+ 
+        String resultado = vehiculoService.registrarRuta(codigo, origen, destino, distancia, tiempo);
+        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
+        else                            Consolautil.mostrarError(resultado);
     }
  
     private void listarRutas() {
         Consolautil.mostrarSubtitulo("Rutas registradas");
-        // TODO: obtener rutaService.listarTodas()
-        // y llamar ruta.imprimirDetalle() en cada una
-        Consolautil.mostrarInfo("Sin rutas registradas aún. [pendiente implementación]");
+        List<Ruta> lista = vehiculoService.listarRutas();
+        if (lista.isEmpty()) {
+            Consolautil.mostrarInfo("No hay rutas registradas.");
+            return;
+        }
+        for (Ruta r : lista) {
+            r.imprimirDetalle();
+            Consolautil.mostrarLinea();
+        }
     }
 }
