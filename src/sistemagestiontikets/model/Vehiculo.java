@@ -80,4 +80,8 @@ public abstract class Vehiculo implements Imprimible{
     public String toString() {
         return "Vehiculo{" + "placa=" + placa + ", ruta=" + ruta + ", capacidadMaxima=" + capacidadMaxima + ", contadorPasajeros=" + contadorPasajeros + ", tarifaBase=" + tarifaBase + '}';
     }
+    
+    @Override
+    public abstract void imprimirDetalle();
+
 }
