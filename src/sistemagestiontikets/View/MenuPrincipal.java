@@ -9,19 +9,19 @@ package sistemagestiontikets.View;
  * @author alexr
  */
 public class MenuPrincipal {
-    /**
+    
     private final MenuVehiculos menuVehiculos;
     private final MenuPersonas  menuPersonas;
     private final MenuTickets   menuTickets;
     private final MenuRutas     menuRutas;
-    private final MenuReportes  menuReportes; */
+    private final MenuReportes  menuReportes;
 
     public MenuPrincipal() {
-       /** this.menuVehiculos = new MenuVehiculos();
+       this.menuVehiculos = new MenuVehiculos();
         this.menuPersonas  = new MenuPersonas();
         this.menuTickets   = new MenuTickets();
         this.menuRutas     = new MenuRutas();
-        this.menuReportes  = new MenuReportes();*/
+        this.menuReportes  = new MenuReportes();
     }
     
      public void iniciar() {
