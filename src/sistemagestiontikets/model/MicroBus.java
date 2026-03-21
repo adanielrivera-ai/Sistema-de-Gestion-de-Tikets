@@ -17,4 +17,16 @@ public class MicroBus extends Vehiculo{
  
     @Override
     public String getTipoVehiculo() { return "MicroBus"; }
+    
+    @Override
+    public void imprimirDetalle() {
+        System.out.println("=== MicroBus ===");
+        System.out.println("Placa    : " + placa);
+        System.out.println("Capacidad: " + capacidadMaxima + " pasajeros");
+        System.out.println("Tarifa   : $" + String.format("%,.0f", tarifaBase));
+        System.out.println("Ruta     : " + (ruta != null
+            ? ruta.getOrigen() + " -> " + ruta.getDestino() : "Sin asignar"));
+        System.out.println("Conductor: " + (conductor != null
+            ? conductor.getNombre() : "Sin asignar"));
+    }
 }
