@@ -4,13 +4,19 @@
  */
 package sistemagestiontikets.View;
 
+import sistemagestiontikets.model.Ticket;
+import sistemagestiontikets.service.TicketService;
+import java.util.List;
+
 /**
  *
  * @author alexr
  */
 public class MenuTickets {
-    public MenuTickets() {
-        // TODO: inicializar servicio
+    private final TicketService ticketService;
+ 
+    public MenuTickets(TicketService ticketService) {
+        this.ticketService = ticketService;
     }
  
     public void mostrar() {
@@ -42,18 +48,16 @@ public class MenuTickets {
         String placaVehiculo  = Consolautil.leerTexto("Placa del vehículo");
         String origen         = Consolautil.leerTexto("Ciudad de origen");
         String destino        = Consolautil.leerTexto("Ciudad de destino");
-        // La fecha de compra se toma automáticamente con LocalDate.now()
-        // TODO (Desarrollador 2): llamar ticketService.venderTicket(...)
-        // Manejar caso: vehículo sin cupos
-        // Manejar caso: pasajero con 3 tickets en el día (Req 2)
-        // Manejar caso: día festivo -> recargo 20% (Req 2)
-        Consolautil.mostrarExito("Ticket generado. [pendiente implementación]");
+        // fechaCompra = LocalDate.now() — se asigna automáticamente en el service
+        String resultado = ticketService.venderTicket(cedulaPasajero, placaVehiculo, origen, destino);
+        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
+        else Consolautil.mostrarError(resultado);
     }
  
     private void listarTickets() {
         Consolautil.mostrarSubtitulo("Todos los tickets vendidos");
-        // TODO: obtener ticketService.listarTodos()
-        // y llamar ticket.imprimirDetalle() en cada uno
-        Consolautil.mostrarInfo("Sin tickets registrados aún. [pendiente implementación]");
+        List<Ticket> lista = ticketService.listarTodos();
+        if (lista.isEmpty()) { Consolautil.mostrarInfo("No hay tickets registrados."); return; }
+        for (Ticket t : lista) { t.imprimirDetalle(); Consolautil.mostrarLinea(); }
     }
 }

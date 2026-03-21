@@ -4,7 +4,10 @@
  */
 package sistemagestiontikets.View;
 
+import sistemagestiontikets.model.Ticket;
+import sistemagestiontikets.service.TicketService;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -12,8 +15,10 @@ import java.time.LocalDate;
  */
 public class MenuReportes {
     
-        public MenuReportes() {
-        // TODO: inicializar servicio
+            private final TicketService ticketService;
+ 
+    public MenuReportes(TicketService ticketService) {
+        this.ticketService = ticketService;
     }
  
     public void mostrar() {
@@ -48,46 +53,62 @@ public class MenuReportes {
     private void reportePorFecha() {
         Consolautil.mostrarSubtitulo("Tickets vendidos por fecha");
         LocalDate fecha = Consolautil.leerFecha("Ingrese la fecha a consultar");
-        // TODO: ticketService.listarPorFecha(fecha)
-        // Llamar ticket.imprimirDetalle() por cada resultado
-        Consolautil.mostrarInfo("Fecha consultada: " + fecha + ". [pendiente implementación]");
+        List<Ticket> lista = ticketService.listarPorFecha(fecha);
+        if (lista.isEmpty()) {
+            Consolautil.mostrarInfo("No hay tickets para la fecha " + fecha + ".");
+            return;
+        }
+        Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
+        for (Ticket t : lista) { t.imprimirDetalle(); Consolautil.mostrarLinea(); }
     }
  
     private void reportePorTipoVehiculo() {
         Consolautil.mostrarSubtitulo("Tickets por tipo de vehículo");
         System.out.println("  1. Buseta   2. MicroBus   3. Bus");
-        int op   = Consolautil.leerEntero("Seleccione tipo");
+        int op = Consolautil.leerEntero("Seleccione tipo");
         String tipo = switch (op) {
             case 1 -> "Buseta"; case 2 -> "MicroBus"; case 3 -> "Bus";
             default -> "Buseta";
         };
-        // TODO: ticketService.listarPorTipoVehiculo(tipo)
-        Consolautil.mostrarInfo("Tipo consultado: " + tipo + ". [pendiente implementación]");
+        List<Ticket> lista = ticketService.listarPorTipoVehiculo(tipo);
+        if (lista.isEmpty()) {
+            Consolautil.mostrarInfo("No hay tickets para vehículos de tipo " + tipo + ".");
+            return;
+        }
+        Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
+        for (Ticket t : lista) { t.imprimirDetalle(); Consolautil.mostrarLinea(); }
     }
  
     private void reportePorTipoPasajero() {
         Consolautil.mostrarSubtitulo("Tickets por tipo de pasajero");
         System.out.println("  1. Regular   2. Estudiante   3. Adulto Mayor");
-        int op   = Consolautil.leerEntero("Seleccione tipo");
+        int op = Consolautil.leerEntero("Seleccione tipo");
         String tipo = switch (op) {
             case 1 -> "REGULAR"; case 2 -> "ESTUDIANTE"; case 3 -> "ADULTO_MAYOR";
             default -> "REGULAR";
         };
-        // TODO: ticketService.listarPorTipoPasajero(tipo)
-        Consolautil.mostrarInfo("Tipo consultado: " + tipo + ". [pendiente implementación]");
+        List<Ticket> lista = ticketService.listarPorTipoPasajero(tipo);
+        if (lista.isEmpty()) {
+            Consolautil.mostrarInfo("No hay tickets para pasajeros de tipo " + tipo + ".");
+            return;
+        }
+        Consolautil.mostrarInfo("Tickets encontrados: " + lista.size());
+        for (Ticket t : lista) { t.imprimirDetalle(); Consolautil.mostrarLinea(); }
     }
  
     private void resumenDiaActual() {
-        Consolautil.mostrarSubtitulo("Resumen del día — " + LocalDate.now());
-        // TODO: ticketService.listarPorFecha(LocalDate.now())
-        // Mostrar total de tickets y total recaudado del día
-        Consolautil.mostrarInfo("Resumen del día actual. [pendiente implementación]");
+        LocalDate hoy = LocalDate.now();
+        Consolautil.mostrarSubtitulo("Resumen del día — " + hoy);
+        List<Ticket> lista = ticketService.listarPorFecha(hoy);
+        double totalHoy = lista.stream().mapToDouble(Ticket::getValorFinal).sum();
+        Consolautil.mostrarInfo("Total tickets vendidos hoy : " + lista.size());
+        Consolautil.mostrarInfo("Total recaudado hoy        : $" + String.format("%,.0f", totalHoy));
     }
  
     private void totalRecaudado() {
         Consolautil.mostrarSubtitulo("Total recaudado general");
-        // TODO: ticketService.calcularTotal()
-        Consolautil.mostrarInfo("Total recaudado: $0. [pendiente implementación]");
+        double total = ticketService.calcularTotal();
+        Consolautil.mostrarInfo("Total recaudado: $" + String.format("%,.0f", total));
     }
     
 }
