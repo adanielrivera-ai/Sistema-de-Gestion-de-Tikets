@@ -8,7 +8,6 @@ import sistemagestiontikets.service.VehiculoService;
 import sistemagestiontikets.service.PersonaService;
 import sistemagestiontikets.service.TicketService;
 import sistemagestiontikets.service.ReservaService;
-import sistemagestiontikets.service.RutaService;
 
 /**
  *
@@ -19,7 +18,6 @@ public class MenuPrincipal {
     private final VehiculoService vehiculoService;
     private final PersonaService  personaService;
     private final TicketService   ticketService;
-    private final RutaService     rutaService;
     private final ReservaService  reservaService;
  
     // Submenús
@@ -31,19 +29,12 @@ public class MenuPrincipal {
     private final MenuReservas  menuReservas;
  
     public MenuPrincipal() {
-
-        // Crear services
-        this.vehiculoService = new VehiculoService();
-        this.personaService  = new PersonaService();
-        this.rutaService     = new RutaService();
-        this.ticketService   = new TicketService(personaService, vehiculoService);
-        this.reservaService  = new ReservaService(vehiculoService, personaService, ticketService);
  
         // Crear submenús inyectando el service que cada uno necesita
-        this.menuVehiculos = new MenuVehiculos(vehiculoService, rutaService);
+        this.menuVehiculos = new MenuVehiculos(vehiculoService);
         this.menuPersonas  = new MenuPersonas(personaService);
         this.menuTickets   = new MenuTickets(ticketService);
-        this.menuRutas     = new MenuRutas(rutaService);
+        this.menuRutas     = new MenuRutas(vehiculoService);
         this.menuReportes  = new MenuReportes(ticketService);
         this.menuReservas  = new MenuReservas(reservaService);
     }
