@@ -12,7 +12,9 @@ import java.util.List;
  * @author alexr
  */
 public class MenuTickets {
-        private final TicketService ticketService;
+
+    private final TicketService ticketService;
+
  
     public MenuTickets(TicketService ticketService) {
         this.ticketService = ticketService;
@@ -43,6 +45,7 @@ public class MenuTickets {
  
     private void venderTicket() {
         Consolautil.mostrarSubtitulo("Vender ticket");
+
         String cedula  = Consolautil.leerTexto("Cédula del pasajero");
         String placa   = Consolautil.leerTexto("Placa del vehículo");
         String origen  = Consolautil.leerTexto("Ciudad de origen");
@@ -57,6 +60,7 @@ public class MenuTickets {
     private void listarTickets() {
         Consolautil.mostrarSubtitulo("Todos los tickets vendidos");
         List<Ticket> lista = ticketService.listarTodos();
+
         if (lista.isEmpty()) {
             Consolautil.mostrarInfo("No hay tickets registrados.");
             return;
@@ -65,5 +69,6 @@ public class MenuTickets {
             t.imprimirDetalle();
             Consolautil.mostrarLinea();
         }
+
     }
 }

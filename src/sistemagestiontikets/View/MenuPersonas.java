@@ -9,6 +9,7 @@ import sistemagestiontikets.model.Pasajero;
 import sistemagestiontikets.service.PersonaService;
 import java.time.LocalDate;
 import java.util.List;
+
 /**
  *
  * @author alexr
@@ -54,7 +55,7 @@ public class MenuPersonas {
         String nombre      = Consolautil.leerTexto("Nombre completo");
         LocalDate fechaNac = Consolautil.leerFecha("Fecha de nacimiento");
         String licencia    = Consolautil.leerTexto("Número de licencia");
- 
+
         System.out.println("  Categoría de licencia:");
         System.out.println("    1. B1   2. B2   3. C1   4. C2");
         int catOp = Consolautil.leerEntero("Seleccione categoría");
@@ -63,10 +64,10 @@ public class MenuPersonas {
             case 3 -> "C1"; case 4 -> "C2";
             default -> "B1";
         };
- 
+
         String resultado = personaService.registrarConductor(cedula, nombre, fechaNac, licencia, categoria);
         if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
-        else                            Consolautil.mostrarError(resultado);
+        else Consolautil.mostrarError(resultado);
     }
  
     private void registrarPasajero() {
@@ -75,9 +76,14 @@ public class MenuPersonas {
         String nombre      = Consolautil.leerTexto("Nombre completo");
         LocalDate fechaNac = Consolautil.leerFecha("Fecha de nacimiento");
  
+
         // Calcular edad para determinar si aplica adulto mayor automáticamente
         int edad = LocalDate.now().getYear() - fechaNac.getYear();
         boolean esEstudiante = false;
+        
+        // El service calcula automáticamente si es ADULTO_MAYOR (>=60 años)
+        // Si no, pregunta si es estudiante
+
         if (edad < 60) {
             String resp = Consolautil.leerTexto("¿Es estudiante? (s/n)");
             esEstudiante = resp.equalsIgnoreCase("s");
@@ -85,7 +91,8 @@ public class MenuPersonas {
  
         String resultado = personaService.registrarPasajero(cedula, nombre, fechaNac, esEstudiante);
         if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
-        else                            Consolautil.mostrarError(resultado);
+        
+        else Consolautil.mostrarError(resultado);
     }
  
     private void listarConductores() {
@@ -104,6 +111,7 @@ public class MenuPersonas {
     private void listarPasajeros() {
         Consolautil.mostrarSubtitulo("Pasajeros registrados");
         List<Pasajero> lista = personaService.listarPasajeros();
+
         if (lista.isEmpty()) {
             Consolautil.mostrarInfo("No hay pasajeros registrados.");
             return;
@@ -112,5 +120,6 @@ public class MenuPersonas {
             p.imprimirDetalle();
             Consolautil.mostrarLinea();
         }
+
     }
 }

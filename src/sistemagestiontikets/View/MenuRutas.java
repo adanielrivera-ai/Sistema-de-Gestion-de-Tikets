@@ -4,6 +4,7 @@
  */
 package sistemagestiontikets.View;
 
+
 import sistemagestiontikets.model.Ruta;
 import sistemagestiontikets.service.VehiculoService;
 import java.util.List;
@@ -12,13 +13,15 @@ import java.util.List;
  * @author alexr
  */
 public class MenuRutas {
-    
-    private final VehiculoService vehiculoService;
  
+
+
+    private VehiculoService vehiculoService;
+
     public MenuRutas(VehiculoService vehiculoService) {
         this.vehiculoService = vehiculoService;
     }
- 
+
     public void mostrar() {
         int opcion;
         do {
@@ -27,36 +30,45 @@ public class MenuRutas {
             System.out.println("  2. Listar rutas");
             System.out.println("  0. Volver al menú principal");
             Consolautil.mostrarLinea();
- 
+
             opcion = Consolautil.leerEntero("Seleccione una opción");
- 
+
             switch (opcion) {
                 case 1 -> registrarRuta();
                 case 2 -> listarRutas();
                 case 0 -> Consolautil.mostrarInfo("Volviendo al menú principal...");
                 default -> Consolautil.mostrarError("Opción no válida.");
             }
- 
+
             if (opcion != 0) Consolautil.pausar();
- 
+
         } while (opcion != 0);
     }
- 
+
     private void registrarRuta() {
         Consolautil.mostrarSubtitulo("Registrar nueva ruta");
-        String codigo    = Consolautil.leerTexto("Código de ruta");
+
+        String codigo    = Consolautil.leerTexto("Código de ruta (ej. R01)");
         String origen    = Consolautil.leerTexto("Ciudad de origen");
         String destino   = Consolautil.leerTexto("Ciudad de destino");
         double distancia = Consolautil.leerDouble("Distancia (km)");
         int    tiempo    = Consolautil.leerEntero("Tiempo estimado (minutos)");
+
  
-        String resultado = vehiculoService.registrarRuta(codigo, origen, destino, distancia, tiempo);
-        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
-        else                            Consolautil.mostrarError(resultado);
+
+
+        String resultado = vehiculoService.registrarRuta(codigo, origen, destino,
+                                                         distancia, tiempo);
+        if (resultado.startsWith("OK"))
+            Consolautil.mostrarExito(resultado);
+        else
+            Consolautil.mostrarError(resultado);
+
     }
- 
+
     private void listarRutas() {
         Consolautil.mostrarSubtitulo("Rutas registradas");
+
         List<Ruta> lista = vehiculoService.listarRutas();
         if (lista.isEmpty()) {
             Consolautil.mostrarInfo("No hay rutas registradas.");
