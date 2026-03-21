@@ -42,6 +42,9 @@ public class Ruta {
     public int getTiempoEstimadoMin() {
         return tiempoEstimadoMin;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Ruta{" + "codigo=" + codigo + ", origen=" + origen + ", destino=" + destino + ", distanciaKm=" + distanciaKm + ", tiempoEstimadoMin=" + tiempoEstimadoMin + '}';
+    }
 }
