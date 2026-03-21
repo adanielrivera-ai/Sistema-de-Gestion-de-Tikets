@@ -11,6 +11,7 @@ import sistemagestiontikets.model.PasajeroEstudiante;
 import sistemagestiontikets.model.PasajeroAdultoMayor;
 import java.time.LocalDate;
 import java.util.List;
+import sistemagestiontikets.model.Ticket;
 
 /**
  * Servicio que gestiona la venta de tickets en el sistema.
@@ -100,5 +101,13 @@ public class TicketService {
      */
     public void listarTickets() {
         ticketDAO.listarTickets().forEach(System.out::println);
+    }
+
+    public String venderTicket(String cedula, String placa, String origen, String destino) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public List<Ticket> listarTodos() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
