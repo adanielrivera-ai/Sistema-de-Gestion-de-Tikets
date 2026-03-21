@@ -22,6 +22,26 @@ public class Ruta {
         this.distanciaKm = distanciaKm;
         this.tiempoEstimadoMin = tiempoEstimadoMin;
     }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    public double getDistanciaKm() {
+        return distanciaKm;
+    }
+
+    public int getTiempoEstimadoMin() {
+        return tiempoEstimadoMin;
+    }
     
     
 }
