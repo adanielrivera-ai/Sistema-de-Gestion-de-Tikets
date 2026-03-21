@@ -7,7 +7,6 @@ package sistemagestiontikets.View;
 import sistemagestiontikets.model.Ruta;
 import sistemagestiontikets.model.Vehiculo;
 import sistemagestiontikets.service.VehiculoService;
-import sistemagestiontikets.service.RutaService;
 import sistemagestiontikets.service.VehiculoService;
 import java.util.List;
 
@@ -22,14 +21,8 @@ public class MenuVehiculos {
  
     public MenuVehiculos(VehiculoService vehiculoService) {
         this.vehiculoService = vehiculoService;
-
-    private final RutaService  rutaService;
- 
-    public MenuVehiculos(VehiculoService vehiculoService, RutaService rutaService) {
-        this.vehiculoService = vehiculoService;
-        this.rutaService     = rutaService;
-
     }
+ 
  
     public void mostrar() {
         int opcion;
@@ -68,35 +61,19 @@ public class MenuVehiculos {
         List<Ruta> rutas = vehiculoService.listarRutas();
         if (rutas.isEmpty()) {
             Consolautil.mostrarError("No hay rutas registradas. Vaya al menú 4 y registre una ruta primero.");
-
-        List<Ruta> rutas = rutaService.listarRutas();
-        if (rutas.isEmpty()) {
-            Consolautil.mostrarError("No hay rutas registradas. Registre una ruta primero (opción 4).");
-            return;
-        }
+            
         Consolautil.mostrarInfo("Rutas disponibles:");
         for (Ruta r : rutas) {
             System.out.println("    [" + r.getCodigo() + "] "
                 + r.getOrigen() + " -> " + r.getDestino()
                 + "  (" + r.getDistanciaKm() + " km)");
         }
- 
         String placa      = Consolautil.leerTexto("Placa del vehículo");
         String codigoRuta = Consolautil.leerTexto("Código de ruta");
- 
         String resultado = vehiculoService.registrarVehiculo(tipo, placa, codigoRuta);
         if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
         else                            Consolautil.mostrarError(resultado);
-
-            System.out.println("  [" + r.getCodigo() + "] "
-                + r.getCiudadOrigen() + " -> " + r.getCiudadDestino()
-                + "  (" + r.getDistanciaKm() + " km)");
         }
-        String placa      = Consolautil.leerTexto("Placa del vehículo");
-        String codigoRuta = Consolautil.leerTexto("Código de ruta");
-        String resultado  = vehiculoService.registrarVehiculo(tipo, placa, codigoRuta);
-        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
-        else Consolautil.mostrarError(resultado);
     }
  
     private void listarVehiculos() {
