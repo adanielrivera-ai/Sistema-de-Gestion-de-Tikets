@@ -22,4 +22,16 @@ public abstract class Vehiculo {
     }
     
     public abstract String getTipoVehiculo();
+    
+    public boolean tieneCupo() {
+        return contadorPasajeros < capacidadMaxima;
+    }
+
+    public boolean agregarPasajero() {
+        if (tieneCupo()) {
+            contadorPasajeros++;
+            return true;
+        }
+        return false;
+    }
 }
