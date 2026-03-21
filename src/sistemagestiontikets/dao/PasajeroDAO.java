@@ -9,6 +9,7 @@ import sistemagestiontikets.model.PasajeroRegular;
 import sistemagestiontikets.model.PasajeroEstudiante;
 import sistemagestiontikets.model.PasajeroAdultoMayor;
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class PasajeroDAO {
             String tipo = pasajero.getClass().getSimpleName();
             bw.write(tipo + ";" +
                      pasajero.getCedula() + ";" +
-                     pasajero.getNombre());
+                     pasajero.getNombre() + ";" +
+                     pasajero.getFechaNacimiento());
             bw.newLine();
         } catch (IOException e) {
             System.out.println("Error al guardar pasajero: " + e.getMessage());
@@ -35,15 +37,16 @@ public class PasajeroDAO {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(";");
+                LocalDate fecha = LocalDate.parse(datos[3]);
                 switch (datos[0]) {
                     case "PasajeroRegular":
-                        lista.add(new PasajeroRegular(datos[1], datos[2]));
+                        lista.add(new PasajeroRegular(datos[1], datos[2], fecha));
                         break;
                     case "PasajeroEstudiante":
-                        lista.add(new PasajeroEstudiante(datos[1], datos[2]));
+                        lista.add(new PasajeroEstudiante(datos[1], datos[2], fecha));
                         break;
                     case "PasajeroAdultoMayor":
-                        lista.add(new PasajeroAdultoMayor(datos[1], datos[2]));
+                        lista.add(new PasajeroAdultoMayor(datos[1], datos[2], fecha));
                         break;
                 }
             }
