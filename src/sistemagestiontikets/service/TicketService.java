@@ -10,41 +10,45 @@ import sistemagestiontikets.model.PasajeroRegular;
 import sistemagestiontikets.model.PasajeroEstudiante;
 import sistemagestiontikets.model.PasajeroAdultoMayor;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import sistemagestiontikets.model.Ticket;
+import java.util.ArrayList;
+
 
 /**
- * Servicio que gestiona la venta de tickets en el sistema.
- * Contiene las reglas de negocio para vender tickets y generar estadisticas.
+ * Dev 2. esto para: Servicio que gestiona la venta de tickets en el sistema.
  * @author JAVIER FERNANDEZ
  */
 public class TicketService {
 
-    /** DAO para persistencia de tickets */
     private TicketDAO ticketDAO = new TicketDAO();
 
-    /** Contador de pasajeros regulares */
     private int contadorRegular = 0;
-    
-    /** Contador de pasajeros estudiantes */
     private int contadorEstudiante = 0;
-    
-    /** Contador de pasajeros adulto mayor */
     private int contadorAdultoMayor = 0;
-    
-    /** Total recaudado por ventas */
     private double totalRecaudado = 0;
 
-    /**
-     * Vende un ticket validando cupos y limite de tickets por dia
-     * @param pasajero pasajero que compra el ticket
-     * @param placa placa del vehiculo
-     * @param origen ciudad de origen
-     * @param destino ciudad de destino
-     * @param tarifaBase tarifa base del vehiculo
-     * @param capacidadMaxima capacidad maxima del vehiculo
-     * @param contadorPasajeros pasajeros actuales en el vehiculo
-     */
+    // Dev 2. esto para: lista de festivos colombianos
+    private static final List<LocalDate> FESTIVOS = Arrays.asList(
+        LocalDate.of(LocalDate.now().getYear(), 1, 1),   // Año Nuevo
+        LocalDate.of(LocalDate.now().getYear(), 1, 6),   // Reyes Magos
+        LocalDate.of(LocalDate.now().getYear(), 3, 24),  // San Jose
+        LocalDate.of(LocalDate.now().getYear(), 5, 1),   // Dia del Trabajo
+        LocalDate.of(LocalDate.now().getYear(), 7, 20),  // Independencia
+        LocalDate.of(LocalDate.now().getYear(), 8, 7),   // Batalla de Boyaca
+        LocalDate.of(LocalDate.now().getYear(), 8, 18),  // Asuncion
+        LocalDate.of(LocalDate.now().getYear(), 10, 13), // Dia de la Raza
+        LocalDate.of(LocalDate.now().getYear(), 11, 3),  // Todos los Santos
+        LocalDate.of(LocalDate.now().getYear(), 11, 17), // Independencia Cartagena
+        LocalDate.of(LocalDate.now().getYear(), 12, 8),  // Inmaculada Concepcion
+        LocalDate.of(LocalDate.now().getYear(), 12, 25)  // Navidad
+    );
+
+    public boolean esFestivo(LocalDate fecha) {
+        return FESTIVOS.contains(fecha);
+    }
+
     public void venderTicket(Pasajero pasajero, String placa,
                               String origen, String destino,
                               double tarifaBase, int capacidadMaxima,
@@ -54,28 +58,35 @@ public class TicketService {
             return;
         }
 
-        long ticketsHoy = ticketDAO.listarTickets().stream()
-                .filter(t -> t.contains(pasajero.getCedula()))
-                .filter(t -> t.contains(LocalDate.now().toString()))
+        long ticketsHoy = ticketDAO.cargarTickets().stream()
+                .filter(t -> t.getCedulaPasajero().equals(pasajero.getCedula()))
+                .filter(t -> t.getFechaCompra().equals(LocalDate.now()))
                 .count();
 
         if (ticketsHoy >= 3) {
-            System.out.println("El pasajero ya tiene 3 tickets comprados hoy.");
+            System.out.println("El pasajero ya tiene " + ticketsHoy + " tickets comprados hoy. No puede comprar mas.");
             return;
         }
 
         double descuento = pasajero.calcularDescuento();
         double valorFinal = tarifaBase * (1 - descuento);
 
-        String lineaTicket = pasajero.getCedula() + ";" +
-                             pasajero.getNombre() + ";" +
-                             placa + ";" +
-                             origen + ";" +
-                             destino + ";" +
-                             LocalDate.now() + ";" +
-                             valorFinal;
+        if (esFestivo(LocalDate.now())) {
+            valorFinal *= 1.20;
+            System.out.println("Dia festivo detectado. Se aplica recargo del 20%.");
+        }
 
-        ticketDAO.guardarTicket(lineaTicket);
+        Ticket ticket = new Ticket(
+            pasajero.getCedula(),
+            pasajero.getNombre(),
+            placa,
+            origen,
+            destino,
+            LocalDate.now(),
+            valorFinal
+        );
+
+        ticketDAO.guardarTicket(ticket);
 
         totalRecaudado += valorFinal;
         if (pasajero instanceof PasajeroRegular) contadorRegular++;
@@ -83,31 +94,66 @@ public class TicketService {
         else if (pasajero instanceof PasajeroAdultoMayor) contadorAdultoMayor++;
 
         System.out.println("Ticket vendido exitosamente. Valor: $" + valorFinal);
+        ticket.imprimirDetalle();
     }
 
-    /**
-     * Muestra las estadisticas de tickets vendidos
-     */
     public void mostrarEstadisticas() {
         System.out.println("=== Estadisticas de Tickets ===");
-        System.out.println("Total recaudado     : $" + totalRecaudado);
-        System.out.println("Pasajeros Regular   : " + contadorRegular);
-        System.out.println("Pasajeros Estudiante: " + contadorEstudiante);
+        System.out.println("Total recaudado       : $" + totalRecaudado);
+        System.out.println("Pasajeros Regular     : " + contadorRegular);
+        System.out.println("Pasajeros Estudiante  : " + contadorEstudiante);
         System.out.println("Pasajeros Adulto Mayor: " + contadorAdultoMayor);
     }
 
-    /**
-     * Lista todos los tickets registrados en el sistema
-     */
     public void listarTickets() {
-        ticketDAO.listarTickets().forEach(System.out::println);
+        ticketDAO.cargarTickets().forEach(t -> t.imprimirDetalle());
     }
 
-    public String venderTicket(String cedula, String placa, String origen, String destino) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Ticket> listarPorFecha(LocalDate fecha) {
+        List<Ticket> lista = new ArrayList<>();
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getFechaCompra().equals(fecha)) {
+                lista.add(t);
+            }
+        }
+        return lista;
     }
 
-    public List<Ticket> listarTodos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Ticket> listarPorTipoVehiculo(String tipo) {
+        List<Ticket> lista = new ArrayList<>();
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getPlacaVehiculo().equalsIgnoreCase(tipo)) {
+                lista.add(t);
+            }
+        }
+        return lista;
+    }
+
+    public List<Ticket> listarPorTipoPasajero(String tipo) {
+        List<Ticket> lista = new ArrayList<>();
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getNombrePasajero().equalsIgnoreCase(tipo)) {
+                lista.add(t);
+            }
+        }
+        return lista;
+    }
+
+    public double calcularTotalRecaudado() {
+        double total = 0;
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            total += t.getValorFinal();
+        }
+        return total;
+    }
+
+    public double calcularRecaudadoPorFecha(LocalDate fecha) {
+        double total = 0;
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getFechaCompra().equals(fecha)) {
+                total += t.getValorFinal();
+            }
+        }
+        return total;
     }
 }
