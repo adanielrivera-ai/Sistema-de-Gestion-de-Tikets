@@ -12,26 +12,47 @@ import sistemagestiontikets.model.PasajeroAdultoMayor;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Servicio que gestiona la venta de tickets en el sistema.
+ * Contiene las reglas de negocio para vender tickets y generar estadisticas.
+ * @author JAVIER FERNANDEZ
+ */
 public class TicketService {
 
+    /** DAO para persistencia de tickets */
     private TicketDAO ticketDAO = new TicketDAO();
 
+    /** Contador de pasajeros regulares */
     private int contadorRegular = 0;
+    
+    /** Contador de pasajeros estudiantes */
     private int contadorEstudiante = 0;
+    
+    /** Contador de pasajeros adulto mayor */
     private int contadorAdultoMayor = 0;
+    
+    /** Total recaudado por ventas */
     private double totalRecaudado = 0;
 
+    /**
+     * Vende un ticket validando cupos y limite de tickets por dia
+     * @param pasajero pasajero que compra el ticket
+     * @param placa placa del vehiculo
+     * @param origen ciudad de origen
+     * @param destino ciudad de destino
+     * @param tarifaBase tarifa base del vehiculo
+     * @param capacidadMaxima capacidad maxima del vehiculo
+     * @param contadorPasajeros pasajeros actuales en el vehiculo
+     */
     public void venderTicket(Pasajero pasajero, String placa,
                               String origen, String destino,
                               double tarifaBase, int capacidadMaxima,
                               int contadorPasajeros) {
-        // Validar cupos disponibles
         if (contadorPasajeros >= capacidadMaxima) {
             System.out.println("No hay cupos disponibles en este vehiculo.");
             return;
         }
 
-        // Validar maximo 3 tickets por pasajero por dia
         long ticketsHoy = ticketDAO.listarTickets().stream()
                 .filter(t -> t.contains(pasajero.getCedula()))
                 .filter(t -> t.contains(LocalDate.now().toString()))
@@ -42,11 +63,9 @@ public class TicketService {
             return;
         }
 
-        // Calcular valor final con descuento
         double descuento = pasajero.calcularDescuento();
         double valorFinal = tarifaBase * (1 - descuento);
 
-        // Registrar ticket
         String lineaTicket = pasajero.getCedula() + ";" +
                              pasajero.getNombre() + ";" +
                              placa + ";" +
@@ -57,7 +76,6 @@ public class TicketService {
 
         ticketDAO.guardarTicket(lineaTicket);
 
-        // Actualizar estadisticas
         totalRecaudado += valorFinal;
         if (pasajero instanceof PasajeroRegular) contadorRegular++;
         else if (pasajero instanceof PasajeroEstudiante) contadorEstudiante++;
@@ -66,6 +84,9 @@ public class TicketService {
         System.out.println("Ticket vendido exitosamente. Valor: $" + valorFinal);
     }
 
+    /**
+     * Muestra las estadisticas de tickets vendidos
+     */
     public void mostrarEstadisticas() {
         System.out.println("=== Estadisticas de Tickets ===");
         System.out.println("Total recaudado     : $" + totalRecaudado);
@@ -74,6 +95,9 @@ public class TicketService {
         System.out.println("Pasajeros Adulto Mayor: " + contadorAdultoMayor);
     }
 
+    /**
+     * Lista todos los tickets registrados en el sistema
+     */
     public void listarTickets() {
         ticketDAO.listarTickets().forEach(System.out::println);
     }
