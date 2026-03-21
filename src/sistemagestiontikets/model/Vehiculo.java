@@ -34,4 +34,44 @@ public abstract class Vehiculo {
         }
         return false;
     }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
+    public Ruta getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(Ruta ruta) {
+        this.ruta = ruta;
+    }
+
+    public int getCapacidadMaxima() {
+        return capacidadMaxima;
+    }
+
+    public void setCapacidadMaxima(int capacidadMaxima) {
+        this.capacidadMaxima = capacidadMaxima;
+    }
+
+    public int getContadorPasajeros() {
+        return contadorPasajeros;
+    }
+
+    public void setContadorPasajeros(int contadorPasajeros) {
+        this.contadorPasajeros = contadorPasajeros;
+    }
+
+    public double getTarifaBase() {
+        return tarifaBase;
+    }
+
+    public void setTarifaBase(double tarifaBase) {
+        this.tarifaBase = tarifaBase;
+    }
 }
