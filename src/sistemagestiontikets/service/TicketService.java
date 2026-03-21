@@ -13,6 +13,7 @@ import sistemagestiontikets.model.Ticket;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Dev 2. esto para: Servicio que gestiona la venta de tickets en el sistema.
@@ -105,5 +106,52 @@ public class TicketService {
 
     public void listarTickets() {
         ticketDAO.cargarTickets().forEach(t -> t.imprimirDetalle());
+    }
+    public List<Ticket> listarPorFecha(LocalDate fecha) {
+        List<Ticket> lista = new ArrayList<>();
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getFechaCompra().equals(fecha)) {
+                lista.add(t);
+            }
+        }
+        return lista;
+    }
+
+    public List<Ticket> listarPorTipoVehiculo(String tipo) {
+        List<Ticket> lista = new ArrayList<>();
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getPlacaVehiculo().equalsIgnoreCase(tipo)) {
+                lista.add(t);
+            }
+        }
+        return lista;
+    }
+
+    public List<Ticket> listarPorTipoPasajero(String tipo) {
+        List<Ticket> lista = new ArrayList<>();
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getNombrePasajero().equalsIgnoreCase(tipo)) {
+                lista.add(t);
+            }
+        }
+        return lista;
+    }
+
+    public double calcularTotalRecaudado() {
+        double total = 0;
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            total += t.getValorFinal();
+        }
+        return total;
+    }
+
+    public double calcularRecaudadoPorFecha(LocalDate fecha) {
+        double total = 0;
+        for (Ticket t : ticketDAO.cargarTickets()) {
+            if (t.getFechaCompra().equals(fecha)) {
+                total += t.getValorFinal();
+            }
+        }
+        return total;
     }
 }
