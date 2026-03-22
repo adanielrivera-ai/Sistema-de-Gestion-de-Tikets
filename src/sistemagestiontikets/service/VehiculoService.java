@@ -70,6 +70,7 @@ public class VehiculoService {
     }
     public List<Vehiculo> listarVehiculos() { return vehiculos; }
     public List<Ruta>     listarRutas()     { return rutas;     }
+    
     public Vehiculo buscarPorPlaca(String placa) {
         for (Vehiculo v : vehiculos) {
             if (v.getPlaca().equalsIgnoreCase(placa)) return v;

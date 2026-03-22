@@ -42,11 +42,11 @@ public class MenuPrincipal {
     public void iniciar() {
         mostrarBienvenida();
  
-        // Verificar reservas vencidas automáticamente al arrancar
+       /**
         int vencidas = reservaService.verificarVencidas();
         if (vencidas > 0) {
             Consolautil.mostrarInfo("Se cancelaron " + vencidas + " reserva(s) vencidas al iniciar.");
-        }
+        }*/
  
         int opcion;
         do {
