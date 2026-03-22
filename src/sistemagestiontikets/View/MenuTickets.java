@@ -5,6 +5,10 @@
 package sistemagestiontikets.View;
 
 import sistemagestiontikets.model.Ticket;
+import sistemagestiontikets.model.Pasajero;
+import sistemagestiontikets.model.Vehiculo;
+import sistemagestiontikets.service.PersonaService;
+import sistemagestiontikets.service.VehiculoService;
 import sistemagestiontikets.service.TicketService;
 import java.util.List;
 /**
@@ -14,6 +18,8 @@ import java.util.List;
 public class MenuTickets {
 
     private final TicketService ticketService;
+    private VehiculoService vehiculoService;
+    private PersonaService  personaService;
 
  
     public MenuTickets(TicketService ticketService) {
@@ -44,18 +50,46 @@ public class MenuTickets {
     }
  
     private void venderTicket() {
-        Consolautil.mostrarSubtitulo("Vender ticket");
+    Consolautil.mostrarSubtitulo("Vender ticket");
 
-        String cedula  = Consolautil.leerTexto("Cédula del pasajero");
-        String placa   = Consolautil.leerTexto("Placa del vehículo");
-        String origen  = Consolautil.leerTexto("Ciudad de origen");
-        String destino = Consolautil.leerTexto("Ciudad de destino");
- 
-        // fechaCompra = LocalDate.now() — se asigna en el service
-        String resultado = ticketService.venderTicket(cedula, placa, origen, destino);
-        if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
-        else                            Consolautil.mostrarError(resultado);
+    String cedula  = Consolautil.leerTexto("Cédula del pasajero");
+    String placa   = Consolautil.leerTexto("Placa del vehículo");
+    String origen  = Consolautil.leerTexto("Ciudad de origen");
+    String destino = Consolautil.leerTexto("Ciudad de destino");
+
+    // 1️⃣ Buscar pasajero
+    Pasajero pasajero = personaService.BuscarPorCedula(cedula);
+    if (pasajero == null) {
+        Consolautil.mostrarError("No existe un pasajero con esa cédula.");
+        return;
     }
+
+    // 2️⃣ Buscar vehículo
+    Vehiculo vehiculo = vehiculoService.buscarPorPlaca(placa);
+    if (vehiculo == null) {
+        Consolautil.mostrarError("No existe un vehículo con esa placa.");
+        return;
+    }
+
+    // 3️⃣ Llamar al service correctamente
+    String resultado = ticketService.venderTicket(
+        pasajero,
+        placa,
+        origen,
+        destino,
+        vehiculo.getTarifaBase(),
+        vehiculo.getCapacidadMaxima(),
+        vehiculo.getContadorPasajeros()
+    );
+
+    // 4️⃣ Mostrar resultado
+    if (resultado.startsWith("OK")) {
+        Consolautil.mostrarExito(resultado);
+        vehiculo.agregarPasajero(); // si aplica
+    } else {
+        Consolautil.mostrarError(resultado);
+    }
+}
  
     private void listarTickets() {
         Consolautil.mostrarSubtitulo("Todos los tickets vendidos");

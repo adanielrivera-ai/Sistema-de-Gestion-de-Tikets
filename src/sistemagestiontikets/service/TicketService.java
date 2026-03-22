@@ -105,8 +105,8 @@ public class TicketService {
         System.out.println("Pasajeros Adulto Mayor: " + contadorAdultoMayor);
     }
 
-    public void listarTickets() {
-        ticketDAO.cargarTickets().forEach(t -> t.imprimirDetalle());
+    public List<Ticket> listarTickets() {
+    return ticketDAO.cargarTickets();
     }
 
     public List<Ticket> listarPorFecha(LocalDate fecha) {

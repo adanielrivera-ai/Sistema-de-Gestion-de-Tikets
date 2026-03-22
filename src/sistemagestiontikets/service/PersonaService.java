@@ -18,6 +18,7 @@ public class PersonaService {
 
     private ConductorDAO conductorDAO = new ConductorDAO();
     private PasajeroDAO pasajeroDAO = new PasajeroDAO();
+    private List<Pasajero> pasajeros;
 
     public String registrarConductor(String cedula, String nombre,
                                     String numLicencia, String categoria) {
@@ -56,5 +57,12 @@ public class PersonaService {
 
     public List<Pasajero> listarPasajeros() {
         return pasajeroDAO.cargarPasajeros();
+    }
+
+    public Pasajero BuscarPorCedula(String cedula) {
+        for (Pasajero p : pasajeros) {
+            if (p.getCedula().equalsIgnoreCase(cedula)) return p;
+        }
+        return null;
     }
 }
