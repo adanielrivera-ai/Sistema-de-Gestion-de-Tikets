@@ -60,7 +60,7 @@ public class MenuTickets {
     private void listarTickets() {
         Consolautil.mostrarSubtitulo("Todos los tickets vendidos");
         List<Ticket> lista;
-        lista = ticketService.listarTodos();
+        lista = ticketService.listarTickets();
 
         if (lista.isEmpty()) {
             Consolautil.mostrarInfo("No hay tickets registrados.");
