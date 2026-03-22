@@ -8,6 +8,7 @@ import sistemagestiontikets.dao.ReservaDAO;
 import sistemagestiontikets.dao.TicketDAO;
 import sistemagestiontikets.model.Reserva;
 import sistemagestiontikets.model.Pasajero;
+import sistemagestiontikets.model.Vehiculo;
 import sistemagestiontikets.model.Ticket;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

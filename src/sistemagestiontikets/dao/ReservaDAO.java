@@ -26,7 +26,7 @@ public class ReservaDAO {
              BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write(r.getCodigo() + ";" +
                      r.getPasajero().getCedula() + ";" +
-                     r.getPlacaVehiculo() + ";" +
+                     r.getVehiculo().getPlaca() + ";" +
                      r.getFechaCreacion() + ";" +
                      r.getFechaViaje() + ";" +
                      r.getEstado());
