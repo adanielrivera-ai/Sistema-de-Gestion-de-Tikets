@@ -65,7 +65,7 @@ public class MenuPersonas {
             default -> "B1";
         };
 
-        String resultado = personaService.registrarConductor(cedula, nombre, fechaNac, licencia, categoria);
+        String resultado = personaService.registrarConductor(cedula, nombre, licencia, categoria);
         if (resultado.startsWith("OK")) Consolautil.mostrarExito(resultado);
         else Consolautil.mostrarError(resultado);
     }
