@@ -19,14 +19,16 @@ public class PersonaService {
     private ConductorDAO conductorDAO = new ConductorDAO();
     private PasajeroDAO pasajeroDAO = new PasajeroDAO();
 
-    public void registrarConductor(String cedula, String nombre,
+    public String registrarConductor(String cedula, String nombre,
                                     String numLicencia, String categoria) {
         Conductor conductor = new Conductor(cedula, nombre, numLicencia, categoria);
         conductorDAO.guardarConductor(conductor);
         System.out.println("Conductor registrado exitosamente.");
+        
+        return "OK "+"Conductor" + " [" + nombre + "] registrado correctamente.";
     }
 
-    public void registrarPasajero(String cedula, String nombre,
+    public String registrarPasajero(String cedula, String nombre,
                                    LocalDate fechaNacimiento, boolean esEstudiante) {
         Pasajero pasajero;
         int edad = LocalDate.now().getYear() - fechaNacimiento.getYear();
@@ -44,6 +46,8 @@ public class PersonaService {
 
         pasajeroDAO.guardarPasajero(pasajero);
         System.out.println("Pasajero registrado exitosamente.");
+        
+        return "OK "+"Pasajero" + " [" + nombre + "] registrado correctamente.";
     }
 
     public List<Conductor> listarConductores() {

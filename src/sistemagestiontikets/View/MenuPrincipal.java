@@ -15,10 +15,10 @@ import sistemagestiontikets.service.ReservaService;
  */
 public class MenuPrincipal {
 
-    private final VehiculoService vehiculoService;
-    private final PersonaService  personaService;
-    private final TicketService   ticketService;
-    private final ReservaService  reservaService;
+    private VehiculoService vehiculoService;
+    private PersonaService  personaService;
+    private TicketService   ticketService;
+    private ReservaService  reservaService;
  
     // Submenús
     private final MenuVehiculos menuVehiculos;

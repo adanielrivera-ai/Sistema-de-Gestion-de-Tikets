@@ -53,7 +53,6 @@ public class MenuPersonas {
         Consolautil.mostrarSubtitulo("Registrar conductor");
         String cedula      = Consolautil.leerTexto("Cédula");
         String nombre      = Consolautil.leerTexto("Nombre completo");
-        LocalDate fechaNac = Consolautil.leerFecha("Fecha de nacimiento");
         String licencia    = Consolautil.leerTexto("Número de licencia");
 
         System.out.println("  Categoría de licencia:");
