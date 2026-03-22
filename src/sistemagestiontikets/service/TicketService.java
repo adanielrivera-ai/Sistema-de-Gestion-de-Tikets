@@ -49,13 +49,12 @@ public class TicketService {
         return FESTIVOS.contains(fecha);
     }
 
-    public void venderTicket(Pasajero pasajero, String placa,
+    public String venderTicket(Pasajero pasajero, String placa,
                               String origen, String destino,
                               double tarifaBase, int capacidadMaxima,
                               int contadorPasajeros) {
         if (contadorPasajeros >= capacidadMaxima) {
             System.out.println("No hay cupos disponibles en este vehiculo.");
-            return;
         }
 
         long ticketsHoy = ticketDAO.cargarTickets().stream()
@@ -65,7 +64,6 @@ public class TicketService {
 
         if (ticketsHoy >= 3) {
             System.out.println("El pasajero ya tiene " + ticketsHoy + " tickets comprados hoy. No puede comprar mas.");
-            return;
         }
 
         double descuento = pasajero.calcularDescuento();
@@ -95,6 +93,8 @@ public class TicketService {
 
         System.out.println("Ticket vendido exitosamente. Valor: $" + valorFinal);
         ticket.imprimirDetalle();
+        
+        return "OK "+"Ticket a" + " [" + destino + "] registrado correctamente.";
     }
 
     public void mostrarEstadisticas() {

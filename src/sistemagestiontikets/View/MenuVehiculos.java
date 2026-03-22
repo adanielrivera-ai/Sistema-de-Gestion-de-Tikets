@@ -7,7 +7,6 @@ package sistemagestiontikets.View;
 import sistemagestiontikets.model.Ruta;
 import sistemagestiontikets.model.Vehiculo;
 import sistemagestiontikets.service.VehiculoService;
-import sistemagestiontikets.service.VehiculoService;
 import java.util.List;
 
 /**

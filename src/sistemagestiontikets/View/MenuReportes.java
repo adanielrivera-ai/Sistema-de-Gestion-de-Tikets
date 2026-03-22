@@ -110,7 +110,7 @@ private final TicketService ticketService;
  
     private void totalRecaudado() {
         Consolautil.mostrarSubtitulo("Total recaudado general");
-        double total = ticketService.calcularTotal();
+        double total = ticketService.calcularTotalRecaudado();
         Consolautil.mostrarInfo("Total recaudado: $" + String.format("%,.0f", total));
     }
     
